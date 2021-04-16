@@ -44,24 +44,12 @@ bindsym $mod+Shift+q kill
 # bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
-#bindsym $mod+j focus left
-#bindsym $mod+k focus down
-#bindsym $mod+l focus up
-#bindsym $mod+odiaeresis focus right
-
-# alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
 bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
 # move focused window
-#bindsym $mod+Shift+j move left
-#bindsym $mod+Shift+k move down
-#bindsym $mod+Shift+l move up
-#bindsym $mod+Shift+odiaeresis move right
-
-# alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
@@ -129,23 +117,32 @@ bindsym $mod+Shift+9 move container to workspace $ws9
 bindsym $mod+Shift+0 move container to workspace $ws10
 
 #Monitor location
-exec ~/.screenlayout/work.sh
+#Home
+exec --no-startup-id ~/bin/i3_layout_home.sh
+bindsym $mod+Ctrl+Shift+h exec --no-startup-id ~/bin/i3_layout_home.sh
+#
+# Reload xrandr with auto (useful when disconnecting a monitor)
+bindsym $mod+Ctrl+Shift+a exec --no-startup-id xrandr --auto
 
-# The workspaces in fixed locations
-set $firstmonitor DVI-I-1
-set $secondmonitor DP-1
+# Fixed locations for workspaces
+# MONITORS
+set $laptopMonitor eDP-1
+set $firstMonitor DP-1-3
+set $secondMonitor DP-1-1
 
 workspace $ws1 output $firstMonitor
 workspace $ws2 output $firstMonitor
-workspace $ws3 output $firstMonitor
+workspace $ws4 output $firstMonitor
+workspace $ws5 output $firstMonitor
+workspace $ws7 output $firstMonitor
+workspace $ws8 output $firstMonitor
 
-workspace $ws4 output $secondmonitor
-workspace $ws5 output $secondmonitor
+workspace $ws3 output $secondMonitor
 workspace $ws6 output $secondMonitor
-workspace $ws7 output $secondMonitor
-workspace $ws8 output $secondMonitor
 workspace $ws9 output $secondMonitor
-workspace $ws10 output $secondMonitor
+
+workspace $ws10 output $laptopMonitor
+# MONITORS END
 
 
 # reload the configuration file
@@ -181,28 +178,42 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
-# Hybrid colors
-set $black      #0f1419
-set $white      #f0f0f0
-#set $white      #e6e1cf
-set $gray       #CCCCCC
-set $darkgray   #666666
-set $green      #406018
-#set $green      #3a5336
-set $blue       #4D73AA
-set $purple     #8473A7
-set $red        #ff3333
-set $orange     #f29718
-set $cyan       #3d7982
-set $dark       #404152
+# Set colors from Xresources
+# NOTE: The '#f0f0f0' in the lines below is the color i3 will use if
+# it fails to get colors from Xresources.
+set_from_resource $c0 i3wm.color0 #f0f0f0
+set_from_resource $c1 i3wm.color1 #f0f0f0
+set_from_resource $c2 i3wm.color2 #f0f0f0
+set_from_resource $c3 i3wm.color3 #f0f0f0
+set_from_resource $c4 i3wm.color4 #f0f0f0
+set_from_resource $c5 i3wm.color5 #f0f0f0
+set_from_resource $c6 i3wm.color6 #f0f0f0
+set_from_resource $c7 i3wm.color7 #f0f0f0
+set_from_resource $c8 i3wm.color8 #f0f0f0
+set_from_resource $c9 i3wm.color9 #f0f0f0
+set_from_resource $c10 i3wm.color10 #f0f0f0
+set_from_resource $c11 i3wm.color11 #f0f0f0
+set_from_resource $c12 i3wm.color12 #f0f0f0
+set_from_resource $c13 i3wm.color13 #f0f0f0
+set_from_resource $c14 i3wm.color14 #f0f0f0
+set_from_resource $c15 i3wm.color15 #f0f0f0
 
-bindsym $mod+d exec dmenu_run -nb "$black" -nf "$white" -sb "$green" -sf "$white"
+# class                 border  backgr. text indicator
+client.focused          $c0     $c2     $c0  $c14
+client.focused_inactive $c8     $c8     $c15 $c14
+client.unfocused        $c8     $c8     $c15 $c14
+client.urgent           $c1     $c9     $c0  $c14
+#client.placeholder      $border $bg     $c15 $c14
 
-#class                  border   backgr.  text     indicator
-client.focused          $black   $green   #FFFFFF  $black
-client.unfocused        $dark    $dark    $white   $dark
-client.focused_inactive $dark    $dark    $white   $dark
-client.urgent           $red     $red     $white   $red
+client.background       $c0
+
+
+
+# bindsym $mod+d exec dmenu_run -nb "$black" -nf "$white" -sb "$green" -sf "$white"
+bindsym $mod+d          exec rofi -monitor -4 -modi "run#drun" -show run
+bindsym $mod+Tab        exec rofi -monitor -4 -modi "window" -show window
+bindsym $mod+shift+Tab  exec rofi -monitor -4 -modi "windowcd" -show windowcd
+
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
@@ -213,14 +224,14 @@ bar {
     font pango:SourceCodePro-12,fontawesome 10
 
    colors {
-            statusline $gray
-            background $black
+            statusline $c7
+            background $c0
 
         # Colors            border      backgr.     text
-        focused_workspace   $green      $green      $white
-        active_workspace    $black      $darkgrey   $white
-        inactive_workspace  $black      $black      $white
-        urgent_workspace    $red        $red        $white
+        focused_workspace   $c2         $c2         $c0
+        active_workspace    $c0         $c8         $c7
+        inactive_workspace  $c0         $c0         $c7
+        urgent_workspace    $c1         $c1         $c0
     }
 }
 
@@ -232,13 +243,14 @@ focus_follows_mouse no
 mouse_warping none
 
 exec --no-startup-id i3-msg 'exec /usr/bin/pulseaudio --start'
-exec xautolock -time 5 -locker 'killall -SIGUSR1 dunst ; xtrlock -b ; killall -SIGUSR2 dunst'
+exec xautolock \
+    -time 8 -locker 'killall -SIGUSR1 dunst ; i3lock -c 000000 ; killall -SIGUSR2 dunst' \
+    -notify 60 -notifier 'notify-send "Inactive" "Locking screen in 1 min"'
 
 exec --no-startup-id nm-applet
 
 # for screenlock
-#bindsym $mod+l exec "spotify_control pause ; killall -SIGUSR1 dunst ; xtrlock -b ; killall -SIGUSR2 dunst"
-bindsym $mod+l exec "killall -SIGUSR1 dunst ; xtrlock -b ; killall -SIGUSR2 dunst"
+bindsym $mod+l exec "killall -SIGUSR1 dunst ; i3lock -c 000000 ; killall -SIGUSR2 dunst"
 
 #calculator
 #bindsym $mod+k exec "gnome-calculator" 
@@ -247,14 +259,14 @@ bindsym $mod+l exec "killall -SIGUSR1 dunst ; xtrlock -b ; killall -SIGUSR2 duns
 
 # Sound controll
 # should fix a few scripts for handling unmute on volume changes and such
-bindsym $mod+x exec --no-startup-id "pactl set-sink-volume 1 +5% ; pactl set-sink-volume 0 +5% ; pkill -RTMIN+10 i3blocks"
-bindsym XF86AudioRaiseVolume exec --no-startup-id "pactl set-sink-volume 1 +5% ; pactl set-sink-volume 0 +5% ; pkill -RTMIN+10 i3blocks"
+bindsym $mod+x exec --no-startup-id "pactl set-sink-volume @DEFAULT_SINK@ +5% ; pkill -RTMIN+10 i3blocks"
+bindsym XF86AudioRaiseVolume exec --no-startup-id "pactl set-sink-volume @DEFAUL_SINK@ +5% ; pkill -RTMIN+10 i3blocks"
 
-bindsym $mod+z exec --no-startup-id "pactl set-sink-volume 1 -5% ; pactl set-sink-volume 0 -5% ; pkill -RTMIN+10 i3blocks"
-bindsym XF86AudioLowerVolume exec --no-startup-id "pactl set-sink-volume 1 -5% ; pactl set-sink-volume 0 -5% ; pkill -RTMIN+10 i3blocks"
+bindsym $mod+z exec --no-startup-id "pactl set-sink-volume @DEFAULT_SINK@ -5% ; pkill -RTMIN+10 i3blocks"
+bindsym XF86AudioLowerVolume exec --no-startup-id "pactl set-sink-volume @DEFAULT_SINK@ -5% ; pkill -RTMIN+10 i3blocks"
 
-bindsym $mod+c exec --no-startup-id "pactl set-sink-mute 1 toggle ; pactl set-sink-mute 0 toggle ; pkill -RTMIN+10 i3blocks"
-bindsym XF86AudioMute exec --no-startup-id "pactl set-sink-mute 1 toggle ; pactl set-sink-mute 0 toggle ; pkill -RTMIN+10 i3blocks"
+bindsym $mod+c exec --no-startup-id "pactl set-sink-mute @DEFAULT_SINK@ toggle ; pkill -RTMIN+10 i3blocks"
+bindsym XF86AudioMute exec --no-startup-id "pactl set-sink-mute @DEFAULT_SINK@ toggle ; pkill -RTMIN+10 i3blocks"
 
 # move all floating windows to the scratchpad
 bindsym $mod+Shift+x [floating] move scratchpad
@@ -264,33 +276,17 @@ bindsym $mod+Shift+minus move scratchpad
 bindsym $mod+minus scratchpad show
 
 # For taking screenshot of selected area
-#bindsym --release Shift+Print exec "scrot -s '%Y-%m-%d_%H%M%S.png' -e 'mv $f ~/Pictures/screenshots/'"
-# For taking screenshot and open it in Pinta
-bindsym --release Print exec "flameshot gui -p /home/erik/Pictures/screenshots"
-
-for_window [class="com.cinnober.lmeclear.tradegt.TradeGT"] floating enable
-for_window [class="Xmessage"] floating enable
+bindsym --release Print exec "flameshot gui -p ~/Pictures/screenshots"
 
 # Making eclipse behave... almost
 for_window [class="Eclipse"] floating disable
 for_window [class="Eclipse" title=".+"] floating enable 
 for_window [class="Eclipse" title="^workspace.*"] floating disable
 
-# Spotify control - spotify with snap issues....
-#bindsym $mod+p exec spotify_control playpause && pkill -RTMIN+10 i3blocks
-#bindsym $mod+n exec spotify_control next && pkill -RTMIN+10 i3blocks
-#bindsym $mod+b exec spotify_control prev && pkill -RTMIN+10 i3blocks
-
-# Open Ranger
-bindsym $mod+Shift+f exec gnome-terminal -e ranger
-
 # Search shortcuts
-bindsym $mod+j exec --no-startup-id ~/bin/dmenu_search_jira
-bindsym $mod+g exec --no-startup-id ~/bin/dmenu_search
+# bindsym $mod+j exec --no-startup-id ~/bin/dmenu_search_jira
+# bindsym $mod+g exec --no-startup-id ~/bin/dmenu_search
 
 #Test mouse buttons
 bindsym button8 sticky toggle
 bindsym --whole-window button9 border toggle
-
-#Set wallpaper
-exec --no-startup-id feh --bg-fill ~/Pictures/wallpapers/9VhZtYR-mountain-pics-wallpaper.jpg

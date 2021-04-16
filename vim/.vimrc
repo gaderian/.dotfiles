@@ -9,6 +9,7 @@ imap <F6> <ESC>:set list!<CR>
 nmap <F6> <ESC>:set list!<CR>
 
 set nowrap
+set clipboard=unnamed
 
 set textwidth=80
 set formatoptions=crq
@@ -94,7 +95,6 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'rickhowe/diffchar.vim'
 Plug 'godlygeek/tabular'
-Plug 'junegunn/seoul256.vim'
 Plug 'junegunn/goyo.vim'
 "Plug 'junegunn/limelight.vim'
 Plug 'tpope/vim-commentary'
@@ -105,10 +105,11 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'dbeniamine/cheat.sh-vim'
 Plug 'mechatroner/rainbow_csv'
 Plug 'dense-analysis/ale'
+Plug 'dylanaraps/wal.vim'
 
 call plug#end()
 
-color seoul256
+colorscheme wal
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_theme='distinguished'
 

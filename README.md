@@ -16,3 +16,9 @@ which will mean that some things will simply not work until the references has
 been fixed or removed, espessially within the config for i3. Hopefully I will
 come around to fixing this to ensure it works out of the box or has some kind of
 script for installing dependencies.
+
+- xautolock
+- oh-my-zsh
+- rofi
+- flameshot
+- wal (pywal)

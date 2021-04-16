@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+function return_true() {
+    echo "VPN" # Long text
+    echo "" # Short text
+    echo \#00FF00 # Colour
+}
+function return_false() {
+    echo "VPN" # Long text
+    echo "" # Short text
+    echo \#FF0000 # Colour
+}
+
+nmcli con show --active | egrep "tun" | egrep -q "csco"
+[[ ${?} -eq 0 ]] && return_true || return_false
